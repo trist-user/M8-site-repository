@@ -60,7 +60,7 @@ function validateCard(){
       card.setCustomValidity("");
    }
 }
-
+ 
 function validateNumber(){
    let cNum = document.getElementById("cardNumber");
    if (cNum.validity.valueMissing){
