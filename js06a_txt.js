@@ -14,6 +14,9 @@ window.addEventListener("load", function() {
       let model = orderForm.elements.model;
       // select Model section list when form opens 
       model.focus();
+      for (let i = 0; i <orderForm.elements.length; i++) {
+            orderForm.elements[i].addEventListener("change", calcOrder);
+      };
 
       // cslculate cost of order
       calcOrder();
@@ -28,7 +31,27 @@ window.addEventListener("load", function() {
 
             //model cost = model cost times quantity
             let modelCost = mValue*quantity;
-            orderForm.elements.modelCost.value = modelCost;
+            orderForm.elements.modelCost.value = modelCost.toLocaleString("en-US", {style: "currency", currency: "USD"});
+
+            // retrieve cost of protection plan
+            let planValue = document.querySelector('input[name="plan"]:checked').value;
+
+            //charge the plan to each item ordered
+            let planCost = planValue * quantity;
+            orderForm.elements.planCost.value = planCost.toLocaleString("en-US", {style: "currency", currency: "USD"});
+
+            let subtotal = modelCost + planCost;
+            orderForm.elements.subtotal.value = subtotal.toLocaleString("en-US", {style: "currency", currency: "USD"});
+
+            let salesTax = subtotal * 0.05;
+            orderForm.elements.salesTax.value = salesTax.toLocaleString("en-US", {style: "currency", currency: "USD"});
+
+            let totalCost = subtotal + salesTax;
+            orderForm.elements.totalCost.value = totalCost.toLocaleString("en-US", {style: "currency", currency: "USD"});
+
+            orderForm.elements.modelName.value = model.options[mIndex].text;
+            let selectedPlan = document.querySelector('input[name="plan"]:checked');
+            orderForm.elements.planName.value= selectedPlan.labels[0].textContent;
 
       };
 });
